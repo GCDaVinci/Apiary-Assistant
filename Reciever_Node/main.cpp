@@ -20,7 +20,7 @@ long tx_interval = 5000;
 char array_rx[15];
 
 void requestEvent() {
-  // send over I2C
+  // send recieved data over I2C
   Wire.write(array_rx);
 }
 
@@ -35,8 +35,7 @@ void handle_rx() {
     if(mrf.get_bufferPHY()){
       Serial.println("Packet data (PHY Payload):");
       for (int i = 0; i < mrf.get_rxinfo()->frame_length; i++) {
-          Serial.print(mrf.get_rxbuf()[i]);
-          
+          Serial.print(mrf.get_rxbuf()[i]); 
       }
     }
     
@@ -51,6 +50,7 @@ void handle_rx() {
     Serial.print("/");
     Serial.println(mrf.get_rxinfo()->rssi, DEC);
 
+    Serial.println(" ");
     Serial.println("Received Data: ");
     Serial.print(array_rx);
 }
@@ -76,7 +76,7 @@ void setup() {
   Wire.onRequest(requestEvent);
 
   Serial.println(" ");
-  Serial.println("I2C Slave Initiated");
+  Serial.println("Initialized as I2C Slave");
   
   mrf.set_pan(0xcafe);
   // This is _our_ address
@@ -97,16 +97,5 @@ void setup() {
 }
 
 void loop() {
-        mrf.check_flags(&handle_rx, &handle_tx);
-        //unsigned long current_time = millis();
-        //if (current_time - last_time > tx_interval) {
-        //    last_time = current_time;
-        //    Serial.println(" ");
-        //    Serial.println("txxxing...");
-        //    mrf.send16(0x4202, "You are 0x4202");
-        //}
-
-    delay(1000);
-    //Serial.println(array_rx);
-    //delay(1000);
+  mrf.check_flags(&handle_rx, &handle_tx);
 }
