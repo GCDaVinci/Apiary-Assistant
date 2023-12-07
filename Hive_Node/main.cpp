@@ -83,12 +83,10 @@ void setup() {
 void loop() {
         mrf.check_flags(&handle_rx, &handle_tx);
         unsigned long current_time = millis();
-        int test_var = 1234;
-        char b = test_var;
         if (current_time - last_time > tx_interval) {
             last_time = current_time;
             Serial.println(" ");
             Serial.println("txxxing...");
-            mrf.send16(0x6001, "Transmission from Hive Node");
+            mrf.send16(0x6001, "You are 0x6001");
         }
 }
